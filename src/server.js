@@ -8,8 +8,15 @@ const PORT = 4000;
 
 const app = express();
 const logger = morgan("dev");
+
+// view 엔진 설정
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
+
+// 미들웨어 설정
 app.use(logger);
 
+// 라우터 설정
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
