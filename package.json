@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "wetube",
   "version": "1.0.0",
   "description": "The best way to watch videos.",
@@ -6,7 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/fityoumaster/wetube-reloaded.git"
   },
-  "type": "module",
   "scripts": {
     "dev": "nodemon --exec babel-node src/server.js"
   },
