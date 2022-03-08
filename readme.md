@@ -5,3 +5,8 @@ https://andybrewer.github.io/mvp/
 
 https://pugjs.org/language/mixins.html
 ※ https://nomadcoders.co/wetube/lectures/2635
+
+3. 
+/video/edit"--->localhost:4000/edit
+a(href="video/edit)--->localhost:4000/videos/video /edit
+a(href=`${video.id}/edit`)--->localhost:4000/videos/1/edit
