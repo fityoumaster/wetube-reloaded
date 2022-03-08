@@ -15,7 +15,8 @@ app.set("views", process.cwd() + "/src/views");
 
 // 미들웨어 설정
 app.use(logger);
-
+// post전송 시 form body 값 읽히도록 설정
+app.use(express.urlencoded({extended: true}));
 // 라우터 설정
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);

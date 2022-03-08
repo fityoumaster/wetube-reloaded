@@ -10,3 +10,10 @@ https://pugjs.org/language/mixins.html
 /video/edit"--->localhost:4000/edit
 a(href="video/edit)--->localhost:4000/videos/video /edit
 a(href=`${video.id}/edit`)--->localhost:4000/videos/1/edit
+
+4. page에 get/post 둘 다 있을때
+ex : videoRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);
+
+5. express.urlencoded([options])
+Express에 내장된 미들웨어 기능입니다. urlencoded 페이로드로 들어오는 요청을 구문 분석하고 바디 파서를 기반으로 합니다.
+ex : form > post > controller req.body 해석
