@@ -22,3 +22,9 @@ ex : form > post > controller req.body 해석
 >> https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
 >> brew services start mongodb-community@5.0 서비스 실행하고
 >> mac terminal > mongod > mongo 입력 후 mongodb shell 진입
+
+7. callback & promise (async, await)
+https://nomadcoders.co/wetube/lectures/2675
+https://nomadcoders.co/wetube/lectures/2682
+
+8. return render / render 둘의 차이는 상관이 없지만 return을 해줌으로써 더 확실하게 다음 코드가 실행되지 않도록 방지해주는 차원
