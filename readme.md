@@ -28,3 +28,7 @@ https://nomadcoders.co/wetube/lectures/2675
 https://nomadcoders.co/wetube/lectures/2682
 
 8. return render / render 둘의 차이는 상관이 없지만 return을 해줌으로써 더 확실하게 다음 코드가 실행되지 않도록 방지해주는 차원
+
+9. /wetube/lectures/2676
+- ([0-9a-f]{24}) MongoDB Id값의 정규식
+- MongoDB CRUD 는 async/await 로 하자.
