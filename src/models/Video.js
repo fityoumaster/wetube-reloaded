@@ -11,5 +11,10 @@ const videoSchema = new mongoose.Schema({
     }
 });
 
+/* 해쉬태그 '#'처리 미들웨어 입니다. */
+videoSchema.pre('save', async function(){
+    this.hashtags = this.hashtags[0].split(",").map(word => word.stratsWith("#") ? word : `#${word}`);
+});
+
 const Video = new mongoose.model("Video", videoSchema);
 export default Video;
