@@ -5,7 +5,7 @@ export const postJoin = async (req, res) => {
     const {name, username, email, password, password2, location} = req.body;
     const pageTitle = "join";
     if(password !== password2){
-        return res.render("join", { 
+        return res.status(400).render("join", { 
             pageTitle,
             errorMessage: "Password confirmation dose not match.",
         });
@@ -13,7 +13,7 @@ export const postJoin = async (req, res) => {
     /* $or : 둘 중 하나라도 있다면 true를 반환합니다. */
     const exists = await User.exists({ $or: [{username}, {email}] });
     if(exists){
-        return res.render("join", { 
+        return res.status(400).render("join", { 
             pageTitle,
             errorMessage: "This username/email is already taken.",
         });
