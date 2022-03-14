@@ -35,7 +35,7 @@ https://nomadcoders.co/wetube/lectures/2682
 
 10. 
 get 받아오기 : req.query
-post 받아오기 : req.params
+post 받아오기 : req.body
 
 11. 
 MongoDB find 시 contain > $regex: new RegExp(keyword, "i")

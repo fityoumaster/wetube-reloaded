@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouter.js";
+import rootRouter from "./routers/rootRouter.js";
 import userRouter from "./routers/userRouter.js";
 import videoRouter from "./routers/videoRouter.js";
 
@@ -16,7 +16,7 @@ app.use(logger);
 // post전송 시 form body 값 읽히도록 설정
 app.use(express.urlencoded({extended: true}));
 // 라우터 설정
-app.use("/", globalRouter);
+app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 
