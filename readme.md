@@ -32,3 +32,10 @@ https://nomadcoders.co/wetube/lectures/2682
 9. /wetube/lectures/2676
 - ([0-9a-f]{24}) MongoDB Id값의 정규식
 - MongoDB CRUD 는 async/await 로 하자.
+
+10. 
+get 받아오기 : req.query
+post 받아오기 : req.params
+
+11. 
+MongoDB find 시 contain > $regex: new RegExp(keyword, "i")
