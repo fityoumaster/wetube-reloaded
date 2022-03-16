@@ -19,12 +19,11 @@ export const postJoin = async (req, res) => {
             errorMessage: "This username/email is already taken.",
         });
     }
-
     try{
         await User.create({
             name, 
-            username, 
             email, 
+            username, 
             password, 
             location
         });
@@ -62,6 +61,9 @@ export const postLogin = async (req, res) => {
                 errorMessage: "Wrong password."
             });
     }
+    // 유저 로그인 정보를 세션에 저장합니다.
+    req.session.loggedIn = true;
+    req.session.user = user;
     return res.redirect("/");
 };
 export const edit = (req, res) => res.send("edit");
