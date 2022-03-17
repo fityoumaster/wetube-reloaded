@@ -8,32 +8,37 @@ import videoRouter from "./routers/videoRouter.js";
 import { localsMiddleware } from "./middlewares.js";
 
 const app = express();
+
+// HTTP Request 요청 시 발생하는 로그 미들웨어 입니다.
 const logger = morgan("dev");
 
-// view 엔진 설정
+// .pug view engine을 설정합니다.
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
 // 미들웨어 설정
 app.use(logger);
-// post전송 시 form body 값 읽히도록 설정
+
+// post전송 시 form body 값이 읽히도록 설정합니다.
 app.use(express.urlencoded({extended: true}));
-// 세션 설정
+
+// 쿠키/세션을 설정합니다.
 app.use(session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
 
-    // session이 끊기지 않기 위해 MongoDB에 저장
+    // 쿠키/세션이 컴파일 될 때마다 끊기지 않기 위해 MongoDB에 저장하여 항상 유지 합니다.
     store: MongoStore.create({mongoUrl: process.env.DB_URL})
 }));
 
 /*
 global 전역벽수 locals 미들웨어 입니다.
-locals는 pug 템플릿에서 기본으로 공유될 수 있는 변수 입니다.
+locals는 .pug/.ejs 템플릿에서 기본으로 공유될 수 있는 변수 입니다.
 */
 app.use(localsMiddleware);
-// 라우터 설정
+
+// 라우터를 설정합니다.
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
