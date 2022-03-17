@@ -86,7 +86,7 @@ export const startGithubLogin = (req, res) => {
 
 export const finishGithubLogin = async (req, res) => {
 
-    // 1. github user 정보를 알기위해 callbakc으로 전달받은 code값으로 access_token 값을 요청합니다.
+    // 1. github user 정보를 알기위해 callback 으로 전달받은 code 값으로 access_token 값을 요청합니다.
     const baseUrl = "https://github.com/login/oauth/access_token";
     const config = {
         client_id: process.env.GH_CLIENTID,
@@ -95,7 +95,7 @@ export const finishGithubLogin = async (req, res) => {
     };
     const params = new URLSearchParams(config).toString();
     const fetchUrl = `${baseUrl}?${params}`;
-    const tokenFetch = await(
+    const tokenRequest = await(
         await fetch(fetchUrl, {
             method: "POST",
             headers: {
@@ -105,16 +105,39 @@ export const finishGithubLogin = async (req, res) => {
     ).json();
 
     // 2. 전달받은 access_token 값으로 user정보를 요청합니다.
-    if("access_token" in tokenFetch){
-        const { access_token } = tokenFetch;
-        const userRequest = await(
-            await fetch("https://api.github.com/user",{
+    if("access_token" in tokenRequest){
+        const { access_token } = tokenRequest;
+        const apiUrl = "https://api.github.com";
+
+        // 2-1. user 정보 전체를 요청합니다.
+        const userData = await(
+            await fetch(`${apiUrl}/user`,{
                 headers: {
                     Authorization: `token ${access_token}`
                 }
             })
         ).json();
-        console.log(userRequest);
+        
+        // 2-1. user email 정보 전체를 요청합니다.
+        const emailData = await(
+            await fetch(`${apiUrl}/user/emails`,{
+                headers: {
+                    Authorization: `token ${access_token}`
+                }
+            })
+        ).json();
+
+        console.log(userData);
+        console.log(emailData);
+        
+        const email = emailData.find(
+            (email) => email.primary === true && email.verified === true
+        );
+        
+        if(!email){
+            return res.redirect("/login");
+        }
+
         return res.redirect("/");
     } else {
         return res.redirect("/login");
