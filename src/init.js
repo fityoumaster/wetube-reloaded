@@ -1,3 +1,5 @@
+// .env 환경변수 파일 변수 값을 불러옵니다.
+import 'dotenv/config';
 import "./db.js";
 import "./models/Video.js";
 import "./models/User.js";

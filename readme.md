@@ -43,3 +43,7 @@ MongoDB find 시 contain > $regex: new RegExp(keyword, "i")
 12.
 pug랑 res.locals는 express가 서로 공유될 수 있도록 기본으로 설정됨.
 >> backend 에서 템플릿에서 기본으로 값을 공유할때 사용(세션 등)
+
+13. 
+.env 환경변수 파일 만들고 비공개 문자열(DB등)을 여기에 보관하고
+gitignore에 추가하여 push 안되게 하자.

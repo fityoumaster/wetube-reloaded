@@ -20,12 +20,12 @@ app.use(logger);
 app.use(express.urlencoded({extended: true}));
 // 세션 설정
 app.use(session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
 
     // session이 끊기지 않기 위해 MongoDB에 저장
-    store: MongoStore.create({mongoUrl: "mongodb://127.0.0.1:27017/wetube"})
+    store: MongoStore.create({mongoUrl: process.env.DB_URL})
 }));
 
 /*
