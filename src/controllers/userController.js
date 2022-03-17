@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
@@ -66,6 +67,60 @@ export const postLogin = async (req, res) => {
     req.session.user = user;
     return res.redirect("/");
 };
+
+export const startGithubLogin = (req, res) => {
+    const baseUrl = "https://github.com/login/oauth/authorize";
+    const config = {
+        client_id: process.env.GH_CLIENTID,
+        allow_signup: false,
+
+        // Github 요청 시 scope는 반드시 공백으로 구분하여 요청합니다.
+        scope: "read:user user:email"
+    }
+
+    // URLSearchParams: key/value 를 url querystring 으로 변환해주는 내장 함수입니다.
+    const params = new URLSearchParams(config).toString();
+    const redirectUrl = `${baseUrl}?${params}`;
+    return res.redirect(redirectUrl);
+};
+
+export const finishGithubLogin = async (req, res) => {
+
+    // 1. github user 정보를 알기위해 전달받은 code값으로 access_token 값을 요청하여 리턴받습니다.
+    const baseUrl = "https://github.com/login/oauth/access_token";
+    const config = {
+        client_id: process.env.GH_CLIENTID,
+        client_secret: process.env.GH_SECRET,
+        code: req.query.code
+    };
+    const params = new URLSearchParams(config).toString();
+    const fetchUrl = `${baseUrl}?${params}`;
+    const tokenFetch = await(
+        await fetch(fetchUrl, {
+            method: "POST",
+            headers: {
+                Accept: "application/json"
+            }
+        })
+    ).json();
+
+    // 2. 전달받은 access_token 값으로 user 정보 api를 요청하여 파라미터를 리턴 받습니다.
+    if("access_token" in tokenFetch){
+        const { access_token } = tokenFetch;
+        const userRequest = await(
+            await fetch("https://api.github.com/user",{
+                headers: {
+                    Authorization: `token ${access_token}`
+                }
+            })
+        ).json();
+        console.log(userRequest);
+        return res.redirect("/");
+    } else {
+        return res.redirect("/login");
+    }
+};
+
 export const edit = (req, res) => res.send("edit");
 export const remove = (req, res) => res.send("remove");
 export const logout = (req, res) => res.send("logout");
