@@ -39,3 +39,7 @@ post 받아오기 : req.body
 
 11. 
 MongoDB find 시 contain > $regex: new RegExp(keyword, "i")
+
+12.
+pug랑 res.locals는 express가 서로 공유될 수 있도록 기본으로 설정됨.
+>> backend 에서 템플릿에서 기본으로 값을 공유할때 사용(세션 등)

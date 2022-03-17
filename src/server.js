@@ -4,6 +4,7 @@ import session from "express-session";
 import rootRouter from "./routers/rootRouter.js";
 import userRouter from "./routers/userRouter.js";
 import videoRouter from "./routers/videoRouter.js";
+import { localsMiddleware } from "./middlewares.js";
 
 const app = express();
 const logger = morgan("dev");
@@ -23,13 +24,11 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use((req, res, next) => {
-    req.sessionStore.all((error, sessions) => {
-        console.log(sessions);
-        next();
-    });
-});
-
+/*
+global 전역벽수 locals 미들웨어 입니다.
+locals는 pug 템플릿에서 기본으로 공유될 수 있는 변수 입니다.
+*/
+app.use(localsMiddleware);
 // 라우터 설정
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
