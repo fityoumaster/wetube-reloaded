@@ -86,7 +86,7 @@ export const startGithubLogin = (req, res) => {
 
 export const finishGithubLogin = async (req, res) => {
 
-    // 1. github user 정보를 알기위해 전달받은 code값으로 access_token 값을 요청하여 리턴받습니다.
+    // 1. github user 정보를 알기위해 callbakc으로 전달받은 code값으로 access_token 값을 요청합니다.
     const baseUrl = "https://github.com/login/oauth/access_token";
     const config = {
         client_id: process.env.GH_CLIENTID,
@@ -104,7 +104,7 @@ export const finishGithubLogin = async (req, res) => {
         })
     ).json();
 
-    // 2. 전달받은 access_token 값으로 user 정보 api를 요청하여 파라미터를 리턴 받습니다.
+    // 2. 전달받은 access_token 값으로 user정보를 요청합니다.
     if("access_token" in tokenFetch){
         const { access_token } = tokenFetch;
         const userRequest = await(
