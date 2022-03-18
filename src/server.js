@@ -16,7 +16,7 @@ const logger = morgan("dev");
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
-// 미들웨어 설정
+// 미들웨어를 설정합니다.
 app.use(logger);
 
 // post전송 시 form body 값이 읽히도록 설정합니다.
