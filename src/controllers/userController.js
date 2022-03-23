@@ -130,15 +130,33 @@ export const finishGithubLogin = async (req, res) => {
         console.log(userData);
         console.log(emailData);
         
-        const email = emailData.find(
+        // 2-2. primary / verified ture인 email 객체를 찾습니다.
+        const emailObj = emailData.find(
             (email) => email.primary === true && email.verified === true
         );
         
-        if(!email){
+        if(!emailObj){
             return res.redirect("/login");
         }
 
-        return res.redirect("/");
+        const existingUser = await User.findOne({ email : emailObj.email });
+        if(existingUser){
+            req.session.loggedIn = true;
+            req.session.user = existingUser;
+            return res.redirect("/");
+        } else {
+            const user = await User.create({
+                name: userData.name,
+                username: userData.login,
+                email: userData.email,
+                password: "",
+                socialOnly: true,
+                location: userData.location
+            });
+            req.session.loggedIn = true;
+            req.session.user = user;
+            return res.redirect("/");
+        }
     } else {
         return res.redirect("/login");
     }
