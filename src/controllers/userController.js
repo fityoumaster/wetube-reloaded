@@ -42,7 +42,7 @@ export const postLogin = async (req, res) => {
     const pageTitle = "Login";
 
     // 입력한 계정정보가 있는지 확인합니다.
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username, socialOnly: false });
     if(!user){
         return res
             .status(400)
@@ -110,7 +110,7 @@ export const finishGithubLogin = async (req, res) => {
         const apiUrl = "https://api.github.com";
 
         // 2-1. user 정보 전체를 요청합니다.
-        const userData = await(
+        const githubUserData = await(
             await fetch(`${apiUrl}/user`,{
                 headers: {
                     Authorization: `token ${access_token}`
@@ -119,7 +119,7 @@ export const finishGithubLogin = async (req, res) => {
         ).json();
         
         // 2-1. user email 정보 전체를 요청합니다.
-        const emailData = await(
+        const githubEmailData = await(
             await fetch(`${apiUrl}/user/emails`,{
                 headers: {
                     Authorization: `token ${access_token}`
@@ -127,42 +127,44 @@ export const finishGithubLogin = async (req, res) => {
             })
         ).json();
 
-        console.log(userData);
-        console.log(emailData);
+        console.log(githubUserData);
+        console.log(githubEmailData);
         
         // 2-2. primary / verified ture인 email 객체를 찾습니다.
-        const emailObj = emailData.find(
+        const emailObj = githubEmailData.find(
             (email) => email.primary === true && email.verified === true
         );
         
         if(!emailObj){
             return res.redirect("/login");
         }
-
-        const existingUser = await User.findOne({ email : emailObj.email });
-        if(existingUser){
-            req.session.loggedIn = true;
-            req.session.user = existingUser;
-            return res.redirect("/");
-        } else {
-            const user = await User.create({
-                name: userData.name,
-                username: userData.login,
-                email: userData.email,
+        
+        let user = await User.findOne({ email : emailObj.email });
+        if(!user){
+            // 실제 github 계정 설정에 name, email 등 입력이 안되어있는 경우가 있을 수 있습니다.
+            user = await User.create({
+                name: githubUserData.name,
+                avatarUrl: githubUserData.avatar_url,
+                username: githubUserData.login,
+                email: githubUserData.email,
                 password: "",
                 socialOnly: true,
-                location: userData.location
+                location: githubUserData.location
             });
-            req.session.loggedIn = true;
-            req.session.user = user;
-            return res.redirect("/");
         }
+        // github 계정으로 로그인 할 경우 이미 가입된 이메일일경우 바로 로그인을 수행합니다.
+        req.session.loggedIn = true;
+        req.session.user = user;
+        return res.redirect("/");
     } else {
         return res.redirect("/login");
-    }
+    } 
+};
+
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
 };
 
 export const edit = (req, res) => res.send("edit");
-export const remove = (req, res) => res.send("remove");
-export const logout = (req, res) => res.send("logout");
 export const see = (req, res) => res.send("see user");
