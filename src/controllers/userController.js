@@ -158,7 +158,7 @@ export const finishGithubLogin = async (req, res) => {
         return res.redirect("/");
     } else {
         return res.redirect("/login");
-    } 
+    }
 };
 
 export const logout = (req, res) => {
@@ -198,14 +198,28 @@ export const postEdit = async (req, res) => {
 };
 
 export const getChangePassword = (req, res) => {
-    /*if(req.session.user.socialOnly === true){
+    if(req.session.user.socialOnly === true){
         return res.redirect("/");
-    }*/
+    }
     return res.render("users/change-password", { pageTitle: "Change Password" });
 };
 
-export const postChangePassword = (req, res) => {
-    return res.render("users/change-password", { pageTitle: "Change Password" });
+export const postChangePassword = async (req, res) => {
+    const { session: { user: { _id, password } }, body : { oldPassword, newPassword, newPasswordConfirmed } } = req;
+    const comparePassword = await bcrypt.compare(oldPassword, password);
+    if(!comparePassword){
+        return res.status(400).render("users/change-password", { pageTitle: "Change Password", errorMessage: "The current password is incorrect." });
+    }
+    if(newPassword !== newPasswordConfirmed){
+        return res.status(400).render("users/change-password", { pageTitle: "Change Password", errorMessage: "The password dose not match the confirmation." });
+    }
+
+    const user = await User.findById(_id);
+    user.password = newPassword;
+    await user.save();
+    
+    req.session.user.password = user.password;
+    return res.redirect("/users/logout");
 };
 
 export const see = (req, res) => res.send("see user");
