@@ -167,11 +167,45 @@ export const logout = (req, res) => {
 };
 
 export const getEdit = (req, res) => {
-    res.render("edit-profile");
+    res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-    res.send("postEdit");
+export const postEdit = async (req, res) => {
+    const { session: { user: { _id } }, body : { name, email, username, location } } = req;
+    const originEmail = req.session.user.email;
+    const originUsername = req.session.user.username;
+
+    if(originEmail !== email || originUsername !== username){
+        const exists = await User.exists({ $or: [{email}, {username}] });
+        if(exists){
+            return res.status(400).render("edit-profile", {
+                pageTitle: "Edit Profile",
+                errorMessage: "This email/username is already taken.",
+            });
+        }
+    }
+
+    // findByIdAndUpdate {new:true} arg는 업데이트 된 값을 리턴해주는 mongoose 자체 옵션 arg 입니다.
+    const updateUser = await User.findByIdAndUpdate(_id, {
+        name,
+        email,
+        username,
+        location
+    }, {new: true});
+    req.session.user = updateUser;
+    
+    return res.redirect("/users/edit");
+};
+
+export const getChangePassword = (req, res) => {
+    if(req.session.user.socialOnly === true){
+        return res.redirect("/");
+    }
+    return res.render("change-password", { pageTitle: "Change Password" });
+};
+
+export const postChangePassword = (req, res) => {
+    return res.render("change-password", { pageTitle: "Change Password" });
 };
 
 export const see = (req, res) => res.send("see user");
