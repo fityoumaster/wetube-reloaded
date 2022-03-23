@@ -167,7 +167,7 @@ export const logout = (req, res) => {
 };
 
 export const getEdit = (req, res) => {
-    res.render("edit-profile", { pageTitle: "Edit Profile" });
+    res.render("users/edit-profile", { pageTitle: "Edit Profile" });
 };
 
 export const postEdit = async (req, res) => {
@@ -178,7 +178,7 @@ export const postEdit = async (req, res) => {
     if(originEmail !== email || originUsername !== username){
         const exists = await User.exists({ $or: [{email}, {username}] });
         if(exists){
-            return res.status(400).render("edit-profile", {
+            return res.status(400).render("users/edit-profile", {
                 pageTitle: "Edit Profile",
                 errorMessage: "This email/username is already taken.",
             });
@@ -198,14 +198,14 @@ export const postEdit = async (req, res) => {
 };
 
 export const getChangePassword = (req, res) => {
-    if(req.session.user.socialOnly === true){
+    /*if(req.session.user.socialOnly === true){
         return res.redirect("/");
-    }
-    return res.render("change-password", { pageTitle: "Change Password" });
+    }*/
+    return res.render("users/change-password", { pageTitle: "Change Password" });
 };
 
 export const postChangePassword = (req, res) => {
-    return res.render("change-password", { pageTitle: "Change Password" });
+    return res.render("users/change-password", { pageTitle: "Change Password" });
 };
 
 export const see = (req, res) => res.send("see user");
