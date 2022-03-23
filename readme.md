@@ -47,3 +47,11 @@ pug랑 res.locals는 express가 서로 공유될 수 있도록 기본으로 설�
 13. 
 .env 환경변수 파일 만들고 비공개 문자열(DB등)을 여기에 보관하고
 gitignore에 추가하여 push 안되게 하자.
+
+14.
+# 파일 업로드
+# https://github.com/expressjs/multer/blob/master/doc/README-ko.md
+app.post('/profile', upload.single('avatar'), function (req, res, next) {
+  // req.file 은 `avatar` 라는 필드의 파일 정보입니다.
+  // 텍스트 필드가 있는 경우, req.body가 이를 포함할 것입니다.
+})

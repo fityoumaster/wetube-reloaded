@@ -9,14 +9,17 @@ import {
     postChangePassword,
     see 
 } from "../controllers/userController.js";
-import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares.js";
+import { protectorMiddleware, publicOnlyMiddleware, uploadFiles } from "../middlewares.js";
 
 const userRouter = express.Router();
 
 // protectorMiddleware, publicOnlyMiddleware
 // 위 미들웨어는 session 여부에 따라 페이지를 직접 URL를 입력하여 접속했을 시 대처 역할을 합니다.
 userRouter.get("/logout", protectorMiddleware, logout);
-userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
+userRouter.route("/edit")
+    .all(protectorMiddleware)
+    .get(getEdit)
+    .post(uploadFiles.single("avatar"), postEdit);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);

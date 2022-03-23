@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddleware = (req, res, next) => {
     res.locals.loggedIn = Boolean(req.session.loggedIn);
     res.locals.siteName = "Wetube";
@@ -20,3 +22,6 @@ export const publicOnlyMiddleware = (req, res, next) => {
         return res.redirect("/");
     }
 };
+
+// https://github.com/expressjs/multer/blob/master/doc/README-ko.md
+export const uploadFiles = multer({dest: "uploads/"});

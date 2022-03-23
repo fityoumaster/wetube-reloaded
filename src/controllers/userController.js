@@ -171,10 +171,9 @@ export const getEdit = (req, res) => {
 };
 
 export const postEdit = async (req, res) => {
-    const { session: { user: { _id } }, body : { name, email, username, location } } = req;
+    const { session: { user: { _id } }, body : { name, email, username, location }, file } = req;
     const originEmail = req.session.user.email;
     const originUsername = req.session.user.username;
-
     if(originEmail !== email || originUsername !== username){
         const exists = await User.exists({ $or: [{email}, {username}] });
         if(exists){
@@ -218,6 +217,7 @@ export const postChangePassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
     
+    // 세션도 반드시 업데이트를 해줍니다.
     req.session.user.password = user.password;
     return res.redirect("/users/logout");
 };
