@@ -171,7 +171,7 @@ export const getEdit = (req, res) => {
 };
 
 export const postEdit = async (req, res) => {
-    const { session: { user: { _id } }, body : { name, email, username, location }, file } = req;
+    const { session: { user: { _id, avatarUrl } }, body: { name, email, username, location }, file } = req;
     const originEmail = req.session.user.email;
     const originUsername = req.session.user.username;
     if(originEmail !== email || originUsername !== username){
@@ -183,9 +183,10 @@ export const postEdit = async (req, res) => {
             });
         }
     }
-
+    
     // findByIdAndUpdate {new:true} arg는 업데이트 된 값을 리턴해주는 mongoose 자체 옵션 arg 입니다.
     const updateUser = await User.findByIdAndUpdate(_id, {
+        avatarUrl: file ? file.path : avatarUrl,
         name,
         email,
         username,
