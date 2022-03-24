@@ -39,6 +39,7 @@ locals는 .pug/.ejs 템플릿에서 기본으로 공유될 수 있는 변수 입
 app.use(localsMiddleware);
 
 // 라우터를 설정합니다.
+app.use("/uploads", express.static("uploads"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

@@ -23,5 +23,16 @@ export const publicOnlyMiddleware = (req, res, next) => {
     }
 };
 
-// https://github.com/expressjs/multer/blob/master/doc/README-ko.md
-export const uploadFiles = multer({dest: "uploads/"});
+// 파일업로드 multer npm 미들웨어 입니다.
+export const avatarUpload = multer({
+    dest: "uploads/avatars/", 
+    limits: {
+        fileSize: 3000000
+    }
+});
+export const videoUpload = multer({
+    dest: "uploads/videos/", 
+    limits: {
+        fileSize: 10000000
+    }
+});
