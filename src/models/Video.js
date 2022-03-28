@@ -9,7 +9,10 @@ const videoSchema = new mongoose.Schema({
     meta: {
         views: { type: Number, required: true, default: 0 },
         rating: { type: Number, required: true, default: 0 }
-    }
+    },
+
+    // ref: "User" 어떤 모델의 키값을 참조할건지 알려줘야 합니다.
+    owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" }
 });
 
 /* 해쉬태그 '#'처리 미들웨어 입니다. */
