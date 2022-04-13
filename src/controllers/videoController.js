@@ -12,7 +12,7 @@ export const watch = async (req, res) => {
     // populate("owner") Video 모델에 ref: "User" 모델을 참조하겠다고 선언했기 때문에 관계 객체를 형성합니다.
     const video = await Video.findById(id).populate("owner");
     if(!video){
-        return res.status(404).render("error/404", { pageTitle: "Video not found." });    
+        return res.status(404).render("error/404", { pageTitle: "Video not found." });
     }
     return res.render("videos/watch", { pageTitle: video.title, video });
 };
@@ -75,7 +75,7 @@ export const postUpload = async (req, res) => {
         return res.status(400).render("videos/upload", { 
             pageTitle: "Upload Video",
             errorMessage: error._message
-         });
+        });
     }
 };
 
@@ -84,7 +84,7 @@ export const deleteVideo = async (req, res) => {
     const { user: { _id } } = req.session;
     const video = await Video.findById(id);
     if(!video){
-        return res.status(404).render("error/404", { pageTitle: "Video not found." });    
+        return res.status(404).render("error/404", { pageTitle: "Video not found." });
     }
     if(String(video.owner) !== String(_id)){
         return res.status(403).redirect("/");
